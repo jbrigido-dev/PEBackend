@@ -7,6 +7,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,9 +34,16 @@ public class Subject {
     private Period period;
     @Column(name = "sub_generation", nullable = false)
     private Integer generation;
-    
+
     private enum Period{
         JANUARY, AUGUST
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (period == null) {
+            period = Period.JANUARY;
+        }
     }
 
 }
