@@ -1,7 +1,5 @@
 package com.jbrigido.pebackend.model;
 
-import java.time.Period;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -40,7 +38,7 @@ public class Subject {
     }
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
         if (period == null) {
             period = Period.JANUARY;
         }
