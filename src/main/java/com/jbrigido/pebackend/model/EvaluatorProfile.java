@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -27,6 +29,9 @@ public class EvaluatorProfile {
     private String institution;
     @Column (name = "evp_specialty", length = 100)
     private String specialty;
+    @OneToOne
+    @JoinColumn(name = "evp_us", nullable = false)
+    private User evaluator;
     @Column(name = "evp_is_external", nullable = false)
     private Boolean isExternal;
     

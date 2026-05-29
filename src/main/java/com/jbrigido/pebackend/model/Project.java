@@ -7,6 +7,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -26,12 +29,15 @@ public class Project {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pro_id", nullable = false)
     private Long id;
-    @Column(name = "pro_event", nullable = false)
-    private Long event;
-    @Column(name = "pro_subject", nullable = false)
-    private Long subject;
-    @Column(name = "pro_author", nullable = false)
-    private Long author;
+    @ManyToOne
+    @JoinColumn(name = "pro_event", nullable = false)
+    private Event event;
+    @OneToOne
+    @JoinColumn(name = "pro_subject", nullable = false)
+    private Subject subject;
+    @ManyToOne
+    @JoinColumn(name = "pro_author", nullable = false)
+    private User author;
     @Column(name = "pro_title", nullable = false)
     private String title;
     @Column(name = "pro_description", nullable = false)

@@ -6,6 +6,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -24,10 +26,12 @@ public class EvaluationDetail {
     @GeneratedValue(strategy = jakarta.persistence.GenerationType.IDENTITY)
     @Column(name = "evde_id")
     private Long id;
-    @Column(name = "evde_eva_id", nullable = false)
-    private Long evaluation;
-    @Column(name = "evde_cri_id", nullable = false)
-    private Long criterion;
+    @ManyToOne
+    @JoinColumn(name = "evde_eva_id", nullable = false)
+    private Evaluation evaluation;
+    @ManyToOne
+    @JoinColumn(name = "evde_cri_id", nullable = false)
+    private Criteria criterion;
     @Column(name = "evde_cri_name", nullable = false)
     private String criterionName;
     @Column(name = "evde_max_score", nullable = false)

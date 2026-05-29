@@ -7,6 +7,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -25,10 +27,12 @@ public class ProjectEvaluator {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "pre_id", nullable = false)
     private Long id;
-    @Column(name = "pre_pro_id", nullable = false)
-    private Long projectId;
-    @Column(name = "pre_us_ev_id", nullable = false)
-    private Long projectUser;
+    @ManyToOne
+    @JoinColumn(name = "pre_pro_id", nullable = false)
+    private Project projectId;
+    @ManyToOne
+    @JoinColumn(name = "pre_us_ev_id", nullable = false)
+    private User projectUser;
     @Column(name = "pre_assigned_at", nullable = false)
     private LocalDateTime assignedAt;
     
