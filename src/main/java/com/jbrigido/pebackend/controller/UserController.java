@@ -1,6 +1,7 @@
 package com.jbrigido.pebackend.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jbrigido.pebackend.model.User;
 import com.jbrigido.pebackend.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
@@ -31,5 +33,16 @@ public class UserController {
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
     }    
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getUserById(@PathVariable Long id) {
+        Optional<User> retrieved = userService.getByID(id);
+        if (!retrieved.isEmpty()) {
+            User user = retrieved.get();
+            return ResponseEntity.status(HttpStatus.OK).body(user);
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+    }
+    
 
 }
