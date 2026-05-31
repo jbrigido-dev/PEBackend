@@ -13,26 +13,26 @@ import com.jbrigido.pebackend.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
 
-
     @Autowired
     private UserService userService;
 
-    @GetMapping    
-    private ResponseEntity<?> getUsers(){
-        
+    @GetMapping
+    private ResponseEntity<?> getUsers() {
+
         List<User> list = userService.getAll();
         if (list.isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("There aren't users");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(list);
-    }    
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getUserById(@PathVariable Long id) {
@@ -43,6 +43,24 @@ public class UserController {
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
     }
-    
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody User user) {
+        Optional<User> retrievedByEnrollment = userService.getByEnrollment(user.getEnrollment());
+        if (!retrievedByEnrollment.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This enrollment is used by another user.");
+        }
+        Optional<User> retrievedByUserName = userService.getByUsername(user.getUsername());
+        if (!retrievedByUserName.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This username is used by another user.");
+            
+        }
+        Optional<User> retrievedByEmail = userService.getByEmail(user.getEmail());
+        if (!retrievedByEmail.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This email is used by another user.");
+        }
+        userService.register(user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Successfully Registered!");
+
+    }
 }
