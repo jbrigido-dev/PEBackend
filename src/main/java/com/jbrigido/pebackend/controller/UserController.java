@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.jbrigido.pebackend.model.User;
 import com.jbrigido.pebackend.service.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class UserController {
         Optional<User> retrievedByUserName = userService.getByUsername(user.getUsername());
         if (!retrievedByUserName.isEmpty()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("This username is used by another user.");
-            
+
         }
         Optional<User> retrievedByEmail = userService.getByEmail(user.getEmail());
         if (!retrievedByEmail.isEmpty()) {
@@ -63,4 +64,30 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Successfully Registered!");
 
     }
+
+    @PatchMapping("/update/{enrollment}")
+    public ResponseEntity<?> putMethodName(@PathVariable String enrollment, @RequestBody User request) {
+        String toUpperEnrollment = enrollment.toUpperCase();
+        Optional<User> retrieved = userService.getByEnrollment(toUpperEnrollment);
+
+        if (retrieved.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User not found");
+        }
+
+        User user = retrieved.get();
+
+        if (request.getName() != null) {
+            user.setName(request.getName());
+        }
+        if (request.getLastname() != null) {
+            user.setLastname(request.getLastname());
+        }
+        if (request.getPassword() != null) {
+            user.setPassword(request.getPassword());
+        }
+
+        userService.register(user);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Successfully Updated!");
+    }
+
 }
